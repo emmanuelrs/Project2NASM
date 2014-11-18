@@ -11,7 +11,11 @@
 %include "/home/emmanuel/Desktop/Project2NASM/io.mac"
 
 .DATA
-	msg: db "Bienvenido al generador de ADN, ingrese la cantidad de bases que desea: ",0 
+	msg: db "Bienvenido al generador de ADN, ingrese la cantidad de bases que desea: ",0
+	ADENINE : db "A",0
+	CYTOSINE: db "C",0
+	THYMINE : db "T",0
+	GUANINE : db "G",0
 
 .UDATA
 	tamBase: resb 32
