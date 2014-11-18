@@ -27,9 +27,17 @@ main:
 lecturaDatos:
 	PutStr msg
 	GetInt [tamBase]
-	PutInt [tamBase]
-	nwln
+	mov CX,[tamBase]
+	mov AX,1
+	call Generador
 	ret	
+
+Generador:
+	PutInt AX
+	nwln
+	INC AX
+	loop Generador
+	ret
 
 salir:
      .EXIT
