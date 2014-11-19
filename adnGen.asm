@@ -12,10 +12,10 @@
 
 .DATA
 	msg: db "Bienvenido al generador de ADN, ingrese la cantidad de bases que desea: ",0
-	;ADENINE : db "A",0
-	;CYTOSINE: db "C",0
-	;THYMINE : db "T",0
-	;GUANINE1 : db "G",0
+	ADENINE1 : db "A"
+	CYTOSINE1: db "C"
+	THYMINE1 : db "T"
+	GUANINE1 : db "G"
 .UDATA
 	tamBase:   rest 2
 	secuencia: rest 2
@@ -24,6 +24,7 @@
     .STARTUP
 main:
 	call lecturaDatos
+	nwln
 	call salir
 lecturaDatos:
 	PutStr msg
@@ -34,8 +35,7 @@ lecturaDatos:
 Generador:
 	call random
 	call genSecuencia
-	PutInt [secuencia]
-	nwln
+	PutStr secuencia
 	loop Generador
 	ret
 random:	
@@ -64,15 +64,19 @@ genSecuencia:
 	je GUANINE	
 	ret
 ADENINE:
+	;PutStr ADENINE1
 	mov byte[secuencia],"A"
 	ret
 CYTOSINE:
+	;PutStr CYTOSINE1
 	mov byte[secuencia],"C"
 	ret
 THYMINE:
+	;PutStr THYMINE1
 	mov byte[secuencia],"T"
 	ret
 GUANINE:
+	;PutStr GUANINE1
 	mov byte[secuencia],"G"
 	ret
 salir:
