@@ -12,30 +12,42 @@
 
 .DATA
 	msg: db "Bienvenido al generador de ADN, ingrese la cantidad de bases que desea: ",0
-	ADENINE1 : db "A"
-	CYTOSINE1: db "C"
-	THYMINE1 : db "T"
-	GUANINE1 : db "G"
+	;filename: db 'ADN.adn', 0
+	msg2: db "Digite el nombre del archivo a generar + la extensión (.adn): ",0
+	msg3: db "Su archivo con extensión .adn ha sido creado correctamente :)",0
+	fd: dd 0
+
 .UDATA
-	tamBase:   rest 2
-	secuencia: rest 2
-	numRandom: rest 2
+	tamBase:   rest 32
+	secuencia: rest 32
+	numRandom: rest 32
+	cadena:    rest 32
+	filename: resb 32
 .CODE
     .STARTUP
 main:
 	call lecturaDatos
 	nwln
+	call creaArchivo
 	call salir
 lecturaDatos:
 	PutStr msg
 	GetInt [tamBase]
 	mov CX,[tamBase]
+	PutStr msg2
+	GetStr filename
+	xor edi, edi
 	call Generador
+	PutStr cadena
+	nwln
+	PutStr msg3
 	ret	
 Generador:
 	call random
 	call genSecuencia
-	PutStr secuencia
+	mov AL, [secuencia]
+	mov byte[cadena + edi], AL
+	inc edi
 	loop Generador
 	ret
 random:	
@@ -64,20 +76,35 @@ genSecuencia:
 	je GUANINE	
 	ret
 ADENINE:
-	;PutStr ADENINE1
 	mov byte[secuencia],"A"
 	ret
 CYTOSINE:
-	;PutStr CYTOSINE1
 	mov byte[secuencia],"C"
 	ret
 THYMINE:
-	;PutStr THYMINE1
 	mov byte[secuencia],"T"
 	ret
 GUANINE:
-	;PutStr GUANINE1
 	mov byte[secuencia],"G"
+	ret
+
+creaArchivo:
+	mov eax, 8 ; Crea el Archivo
+        mov ebx, filename ; Asigna el nombre del Archivo
+        mov ecx, 644O 
+        int 80h 
+        mov [fd], eax 	
+	mov eax, 4 ; Escribe en el Archivo
+        mov ebx, [fd],
+        mov ecx, cadena
+        mov edx, [tamBase]
+        int 80h
+	mov eax, 6 ; close
+        mov ebx, [fd]
+        int 80h
+	mov eax, 1 ; exit
+        mov ebx, 0 ; return value
+        int 80h
 	ret
 salir:
      .EXIT
