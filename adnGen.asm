@@ -8,13 +8,14 @@
 ;*	   							 *
 ;*****************************************************************
 
-%include "/home/emmanuel/Desktop/Project2NASM/io.mac"
+%include "io.mac"
 
 .DATA
 	msg: db "Bienvenido al generador de ADN, ingrese la cantidad de bases que desea: ",0
 	;filename: db 'ADN.adn', 0
 	msg2: db "Digite el nombre del archivo a generar + la extensión (.adn): ",0
 	msg3: db "Su archivo con extensión .adn ha sido creado correctamente :)",0
+	preg: db "Desea crear otra secuencia de ADN?(y/n): ",0
 	fd: dd 0
 
 .UDATA
@@ -23,12 +24,14 @@
 	numRandom: rest 32
 	cadena:    rest 32
 	filename: resb 32
+	resp resb 1
 .CODE
     .STARTUP
 main:
 	call lecturaDatos
 	nwln
 	call creaArchivo
+	;call pregunta
 	call salir
 lecturaDatos:
 	PutStr msg
@@ -102,9 +105,13 @@ creaArchivo:
 	mov eax, 6 ; close
         mov ebx, [fd]
         int 80h
-	mov eax, 1 ; exit
-        mov ebx, 0 ; return value
-        int 80h
+	ret
+pregunta:
+	PutStr preg
+	GetStr resp
+	cmp byte[resp], "y"
+	je main
+	jne salir
 	ret
 salir:
      .EXIT
