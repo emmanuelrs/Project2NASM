@@ -20,7 +20,12 @@
 	file_des2: rest 0 
 	buffer_archivo2: rest 20000
 	archivo1: rest 20000
-	archivo2: rest 20000
+	archivo2: rest 20000 
+	Score: rest 32 
+	AliSequeA: rest 32
+	AliSequeB: rest 32 
+	TamArch1: rest 32 
+	TamArch2: rest 32
 .CODE
 	.STARTUP
 
@@ -35,7 +40,11 @@ main:
 	call leeArch2
 	PutStr [archivo1]
 	nwln
+	PutInt [TamArch1]
+	nwln 
 	PutStr [archivo2]
+	nwln	
+	PutInt [TamArch2]
 	nwln
 	call salir
 
@@ -54,7 +63,8 @@ leeArch1:
 	mov ECX, buffer_archivo
 	mov EDX, 20000
 	int 80h 
-	mov [archivo1], ECX
+	mov [archivo1], ECX 
+	mov [TamArch1], EAX
 	ret
 leeArch2:
 	xor ECX,ECX
@@ -71,7 +81,8 @@ leeArch2:
 	mov ECX, buffer_archivo2
 	mov EDX, 20000
 	int 80h 
-	mov [archivo2], ECX
+	mov [archivo2], ECX 
+	mov [TamArch2], EAX	
 	ret
 salir:
 	.EXIT
